@@ -1,10 +1,12 @@
-- Build expense form component
+- [] Build expense form component
 
-  - [x] add form control elements
-  - [] add styles
-  - []
+  - ✅ add form control elements
+  - ✅ review different ways to add CSS styles and choose one to add some styles
+  - ✅ validate form input using Zod: required fields, disabled submit button if invalid input, minLength
 
-  - Use Zod with React Hook Form to validate and process input data: schema, disabled submit button
+- [] Build expense list component
+- [] Build expense filter component
 
-- Build expense list component
-- Build expense filter component
+Qs:
+
+- [] How to validate html select input with Zod? (currently using min which is not addressing the issue)
