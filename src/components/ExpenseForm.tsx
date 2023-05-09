@@ -77,7 +77,11 @@ const ExpenseForm = () => {
             <p className="text-danger">{errors.category?.message}</p>
           )}
         </div>
-        <button disabled={!isValid} type="submit" className="btn btn-primary">
+        <button
+          disabled={!isValid}
+          type="submit"
+          className="btn btn-primary mb-3"
+        >
           Submit
         </button>
       </form>
