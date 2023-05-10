@@ -11,6 +11,8 @@ interface Props {
 }
 
 const ExpenseList = ({ expenses, onDelete }: Props) => {
+  if (expenses.length === 0) return null;
+
   return (
     <div>
       <table className="table table-bordered">
@@ -52,8 +54,6 @@ const ExpenseList = ({ expenses, onDelete }: Props) => {
             <td></td>
           </tr>
         </tfoot>
-
-        {/* {props.list.map(<tr><td>{item.description}</td><td>{item.amount}<td/><td>item.category</td></tr>)} */}
       </table>
     </div>
   );

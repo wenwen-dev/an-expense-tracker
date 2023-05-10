@@ -1,36 +1,47 @@
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import categories from "./categories";
 
 const schema = z.object({
   description: z
     .string()
-    .min(3, { message: "Description should be at least 3 characters." }),
-  amount: z.number({
-    required_error: "Amount is required.",
-    invalid_type_error: "Must provide an amount",
+    .min(3, { message: "Description must be at least 3 characters." })
+    .max(50, { message: "Description must be fewer than 50 characters." }),
+  amount: z
+    .number({
+      invalid_type_error: "Must provide an amount",
+    })
+    .min(0.01, { message: "Amount must be between 0.01 and 100,000" })
+    .max(100_000, { message: "Amount must be between 0.01 and 100,000" }),
+  category: z.enum(categories, {
+    errorMap: () => ({ message: "Category is required." }),
   }),
-  category: z
-    .string({ required_error: "Category is required." })
-    .min(5, { message: "Must choose a category" }),
 });
 
-type FormData = z.infer<typeof schema>;
+type ExpenseFormData = z.infer<typeof schema>;
 
-const ExpenseForm = () => {
+interface Props {
+  onSubmit: (data: ExpenseFormData) => void;
+}
+
+const ExpenseForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
-
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
-  };
+    reset,
+  } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+  // in <> we are saying this form will be of type ExpenseFormData, i.e. with description, amount, category
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit((data) => {
+          onSubmit(data);
+          reset();
+        })}
+      >
         <div className="mb-3">
           <label htmlFor="description" className="form-label">
             Description
@@ -68,17 +79,19 @@ const ExpenseForm = () => {
             id="category"
             className="form-select"
           >
-            <option value="">-- Please choose an option --</option>
-            <option value="groceries">Groceries</option>
-            <option value="utilities">Utilities</option>
-            <option value="entertainment">Entertainment</option>
+            <option value=""></option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
           {errors.category && (
             <p className="text-danger">{errors.category?.message}</p>
           )}
         </div>
         <button
-          disabled={!isValid}
+          // disabled={!isValid}
           type="submit"
           className="btn btn-primary mb-3"
         >
